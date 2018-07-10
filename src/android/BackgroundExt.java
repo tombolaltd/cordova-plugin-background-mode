@@ -121,15 +121,6 @@ class BackgroundExt {
         if (action.equalsIgnoreCase("dimmed")) {
             isDimmed(callback);
         }
-
-        if (action.equalsIgnoreCase("wakeup")) {
-            wakeup();
-        }
-
-        if (action.equalsIgnoreCase("unlock")) {
-            wakeup();
-            unlock();
-        }
     }
 
     // codebeat:enable[ABC]
@@ -233,25 +224,6 @@ class BackgroundExt {
     }
 
     /**
-     * Wakes up the device if the screen isn't still on.
-     */
-    private void wakeup() {
-        try {
-            acquireWakeLock();
-        } catch (Exception e) {
-            releaseWakeLock();
-        }
-    }
-
-    /**
-     * Unlocks the device even with password protection.
-     */
-    private void unlock() {
-        Intent intent  = getLaunchIntent();
-        getApp().startActivity(intent);
-    }
-
-    /**
      * Acquire a wake lock to wake up the device.
      */
     private void acquireWakeLock() {
@@ -279,24 +251,6 @@ class BackgroundExt {
             wakeLock.release();
             wakeLock = null;
         }
-    }
-
-    /**
-     * Add required flags to the window to unlock/wakeup the device.
-     */
-    static void addWindowFlags(Activity app) {
-        final Window window = app.getWindow();
-
-        app.runOnUiThread(new Runnable() {
-            public void run() {
-                window.addFlags(
-                        FLAG_ALLOW_LOCK_WHILE_SCREEN_ON |
-                        FLAG_SHOW_WHEN_LOCKED |
-                        FLAG_TURN_SCREEN_ON |
-                        FLAG_DISMISS_KEYGUARD
-                );
-            }
-        });
     }
 
     /**
